@@ -1,4 +1,4 @@
-from enum import Enum 
+from enum import Enum
 import os
 import shutil
 import pathlib
@@ -7,10 +7,12 @@ import torch
 import re
 import JSONHelper
 
+
 class MODE(Enum):
     NEW = 0
     REPLACE = 1
     LOAD = 2
+
 
 class UserQuery:
     def setup(self, model, output, projname=""):
@@ -29,7 +31,8 @@ class UserQuery:
             self.create_log(logfile)
         elif mode == MODE.LOAD:
             print("MODE: LOAD")
-            checkpointfile, counter_iteration = self.load_most_recent_checkpoint(projectdir, "/cp-*")
+            checkpointfile, counter_iteration = self.load_most_recent_checkpoint(
+                projectdir, "/cp-*")
             print("Current iteration:", counter_iteration)
             if os.path.exists(logfile):
                 self.clip_log_by_number(logfile, counter_iteration)
@@ -42,19 +45,23 @@ class UserQuery:
         return projectdir, logfile, counter_iteration
 
     def make_backup_of_important_files(self, projectdir):
-        shutil.copy2("./model.py", projectdir + "/model_backup.py")
-        shutil.copy2("./main.py", projectdir + "/main_backup.py")
+        shutil.copy2("./Network/pytorch/model.py",
+                     projectdir + "/model_backup.py")
+        shutil.copy2("./Network/pytorch/main.py",
+                     projectdir + "/main_backup.py")
 
     def load_parts_of_checkpoint(self, checkpointfile, model):
         model_dict = model.state_dict()
         model_pretrained = torch.load(checkpointfile)
 
-        model_pretrained = {k: v for k, v in model_pretrained.items() if k in model_dict}
-        model_dict.update(model_pretrained) 
+        model_pretrained = {
+            k: v
+            for k, v in model_pretrained.items() if k in model_dict
+        }
+        model_dict.update(model_pretrained)
 
         model.load_state_dict(model_dict)
 
-    
     def create_log(self, logfile):
         JSONHelper.write(logfile, [])
 
@@ -96,6 +103,7 @@ class UserQuery:
             elif text == "l":
                 return MODE.LOAD, projectdir
         quit()
+
     def create_folder_increment(self, basedir, foldername0):
         for i in range(1000):
             suffix = foldername0 + str(i)
@@ -104,13 +112,13 @@ class UserQuery:
                 return suffix
 
     def extract_number(self, f):
-        s = re.findall("(\d+).pth",f)
-        return (int(s[0]) if s else -1,f)
+        s = re.findall("(\d+).pth", f)
+        return (int(s[0]) if s else -1, f)
 
     def load_most_recent_checkpoint(self, dir, wildcard):
         files = glob.glob(dir + wildcard)
         files = [self.extract_number(f) for f in files]
-        files = sorted(files, key=lambda x : x[0])
+        files = sorted(files, key=lambda x: x[0])
         res = files[-1]
         return res[1], res[0]
 
@@ -118,4 +126,3 @@ class UserQuery:
         data = JSONHelper.read(logfile)
         clipped = [item for item in data if item["iteration"] <= num_max]
         JSONHelper.write(logfile, clipped)
-

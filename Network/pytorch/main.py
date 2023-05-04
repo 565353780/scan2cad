@@ -1,6 +1,3 @@
-import sys
-assert (sys.version_info >= (3, 5))
-
 import argparse
 import pathlib
 import os, inspect, time
@@ -13,7 +10,7 @@ import numpy as np
 import model as modelnn
 #import model_skip as modelnn
 
-sys.path.append("../base")
+sys.path.append("Network/base")
 import user_query
 import kernels
 import sample_loader
@@ -123,7 +120,6 @@ if torch.cuda.is_available():
 
 
 class TrainingWorld:
-
     def __init__(self, counter_iteration, projectdir, logfile):
         self.counter_iteration = counter_iteration
         self.projectdir = projectdir
