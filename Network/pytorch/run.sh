@@ -3,7 +3,7 @@ in=$1
 
 name=dummy
 command="CUDA_VISIBLE_DEVICES=0
-		python ./Network/pytorch/main.py 
+		python ./Network/pytorch/main.py
 		--name $name 
 		--weight 64.0
 		--batch_size 8
