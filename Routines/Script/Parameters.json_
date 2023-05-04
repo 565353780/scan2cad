@@ -1,8 +1,0 @@
-{
-	"scannet" : "/home/chli/chLi/ScanNet/scans/",
-	"shapenet" : "/home/chli/chLi/ShapeNet/Core/ShapeNetCore.v2/",
-	"scannet_voxelized" : "/home/chli/chLi/ScanNet/sdf/",
-	"shapenet_voxelized" : "/home/chli/chLi/ShapeNet/df/",
-	"centers" : "/home/chli/chLi/ScanNet/center/",
-	"heatmaps" : "../../Assets/training-data/CAD-heatmaps-sample/"
-}
